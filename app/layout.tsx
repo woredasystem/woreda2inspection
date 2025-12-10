@@ -12,7 +12,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "የብልጽግና ፓርቲ የኢንስፔክሽንና የሥነምግባር ኮሚሽን",
   description:
-    "Government-grade portal with leadership, document access, and temporary QR flows.",
+    "የከተማ ኮሚሽን አመራሮች፣ የሰነድ ቤተ-መዛግብት እና የቀጠሮ አገልግሎት የሚሰጥ ኦፊሴላዊ መድረክ።",
 };
 
 export default async function RootLayout({

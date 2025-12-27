@@ -142,8 +142,10 @@ export async function getNewsItem(id: string): Promise<NewsRecord | null> {
         return null;
     }
 
+    if (!data) return null;
+
     // Fetch photos for this news item
     const photos = await getNewsPhotos(id);
 
-    return { ...(data as NewsRecord), photos } || null;
+    return { ...(data as NewsRecord), photos };
 }

@@ -11,12 +11,9 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
       },
       {
+        // Supabase storage host for this project (news images, leader photos, documents)
         protocol: 'https',
-        hostname: 'oblhonzlkflvoxqymmys.supabase.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'rngmreyszyrddskbzhmd.supabase.co',
+        hostname: 'qypynubfemtvczanrics.supabase.co',
       },
       {
         protocol: 'https',

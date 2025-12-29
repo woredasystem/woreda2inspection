@@ -1,6 +1,7 @@
 import { getNews } from "@/lib/news";
 import Link from "next/link";
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { HiArrowRight, HiCalendar, HiNewspaper } from "react-icons/hi2";
 import { format } from "date-fns";
 import { cookies } from "next/headers";
@@ -99,8 +100,11 @@ export async function NewsSection() {
                                         const thumb = item.cover_image_url || getYoutubeThumbnailUrl(item.youtube_url);
 
                                         if (thumb) {
+                                            // Use SupabaseImage for Supabase URLs, regular Image for YouTube thumbnails
+                                            const isSupabaseUrl = thumb.includes('supabase.co');
+                                            const ImageComponent = isSupabaseUrl ? SupabaseImage : Image;
                                             return (
-                                                <Image
+                                                <ImageComponent
                                                     src={thumb}
                                                     alt={title}
                                                     fill

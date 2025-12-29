@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { motion } from "framer-motion";
 import { LeaderRecord } from "@/types";
 import { HiUser } from "react-icons/hi2";
@@ -54,7 +55,7 @@ export function PrincipalMessage({ principal }: PrincipalMessageProps) {
                     {/* Left: Large Photo */}
                     <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-[40px] bg-gradient-to-br from-blue-100 to-purple-100 shadow-2xl">
                         {principal.photo_url ? (
-                            <Image
+                            <SupabaseImage
                                 src={principal.photo_url}
                                 alt={getName()}
                                 fill

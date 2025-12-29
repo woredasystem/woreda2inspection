@@ -3,7 +3,7 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { getAllNews } from "@/lib/news";
 import { NewsForm } from "@/components/admin/NewsForm";
 import { HiNewspaper, HiPencilSquare, HiTrash, HiCheckCircle } from "react-icons/hi2";
-import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { format } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { deleteNewsItem } from "@/lib/news-actions";
@@ -58,7 +58,7 @@ export default async function AdminNewsPage() {
                             {/* Image */}
                             <div className="relative h-48 w-full bg-slate-100">
                                 {item.cover_image_url ? (
-                                    <Image
+                                    <SupabaseImage
                                         src={item.cover_image_url}
                                         alt={item.title}
                                         fill

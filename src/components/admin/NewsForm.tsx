@@ -7,6 +7,7 @@ import { HiCheckCircle, HiXCircle, HiPhoto, HiPencilSquare, HiCloudArrowUp, HiSp
 import { createNewsItem, updateNewsItem, uploadNewsImage, uploadNewsImages } from "@/lib/news-actions";
 import type { NewsRecord } from "@/types";
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { useTranslations } from "next-intl";
 
 interface NewsFormProps {
@@ -229,7 +230,7 @@ export function NewsForm({ initialData, onSuccess }: NewsFormProps) {
                     {previewImages.length > 0 ? (
                         <>
                             <div className="relative w-full h-full">
-                                <Image
+                                <SupabaseImage
                                     src={previewImages[0]}
                                     alt="Preview"
                                     fill

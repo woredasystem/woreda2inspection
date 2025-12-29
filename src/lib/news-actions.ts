@@ -120,14 +120,42 @@ export async function uploadNewsImage(file: File): Promise<string> {
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
     const filePath = `${woredaId}/${fileName}`;
 
-    const { error: uploadError } = await supabase
+    // Check if bucket exists by trying to list it
+    const { data: buckets, error: bucketError } = await supabase.storage.listBuckets();
+    if (bucketError) {
+        console.error("Error listing buckets:", bucketError);
+        throw new Error(`Failed to access storage: ${bucketError.message}`);
+    }
+
+    const newsBucket = buckets?.find(b => b.name === 'news');
+    if (!newsBucket) {
+        throw new Error(
+            "Storage bucket 'news' does not exist. " +
+            "Please create a public bucket named 'news' in your Supabase Storage settings."
+        );
+    }
+
+    const { data: uploadData, error: uploadError } = await supabase
         .storage
         .from('news')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+            contentType: file.type || 'image/jpeg',
+            upsert: false,
+        });
 
     if (uploadError) {
         console.error("Error uploading image:", uploadError);
-        throw new Error(uploadError.message);
+        if (uploadError.message.includes('Bucket not found')) {
+            throw new Error(
+                "Storage bucket 'news' not found. " +
+                "Please create a public bucket named 'news' in your Supabase Storage settings."
+            );
+        }
+        throw new Error(`Failed to upload image: ${uploadError.message}`);
+    }
+
+    if (!uploadData) {
+        throw new Error("Upload succeeded but no data returned");
     }
 
     // Get public URL
@@ -135,6 +163,11 @@ export async function uploadNewsImage(file: File): Promise<string> {
         .storage
         .from('news')
         .getPublicUrl(filePath);
+
+    // Verify the URL is valid
+    if (!publicUrl) {
+        throw new Error("Failed to generate public URL for uploaded image");
+    }
 
     return publicUrl;
 }

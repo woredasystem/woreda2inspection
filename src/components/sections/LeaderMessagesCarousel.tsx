@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeaderRecord } from "@/types";
 import { HiUser, HiChevronLeft, HiChevronRight } from "react-icons/hi2";
@@ -70,7 +71,7 @@ export function LeaderMessagesCarousel({ leaders }: LeaderMessagesCarouselProps)
                     {/* Left: Large Photo */}
                     <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-[40px] bg-gradient-to-br from-blue-100 to-purple-100 shadow-2xl">
                         {currentLeader.photo_url ? (
-                            <Image
+                            <SupabaseImage
                                 src={currentLeader.photo_url}
                                 alt={getName(currentLeader)}
                                 fill

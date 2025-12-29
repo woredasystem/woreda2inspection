@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { motion } from "framer-motion";
 import { LeaderRecord } from "@/types";
 import { HiUser, HiChevronLeft, HiChevronRight } from "react-icons/hi2";
@@ -122,7 +123,7 @@ export function CommissionMembers({ categories }: CommissionMembersProps) {
                                             <div className="group/card relative overflow-hidden rounded-3xl bg-white p-4 shadow-lg transition-all hover:-translate-y-2 hover:shadow-xl border border-slate-100 h-full">
                                                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-slate-100 mb-4">
                                                     {leader.photo_url ? (
-                                                        <Image
+                                                        <SupabaseImage
                                                             src={leader.photo_url}
                                                             alt={getName(leader)}
                                                             fill

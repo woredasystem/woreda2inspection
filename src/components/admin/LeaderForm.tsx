@@ -7,6 +7,7 @@ import { HiCheckCircle, HiXCircle, HiPhoto, HiPencilSquare, HiCloudArrowUp, HiSp
 import { createLeader, updateLeader, uploadLeaderImage } from "@/lib/leader-actions";
 import type { LeaderRecord } from "@/types";
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import { useTranslations } from "next-intl";
 
 interface LeaderFormProps {
@@ -352,7 +353,7 @@ export function LeaderForm({ initialData, onSuccess }: LeaderFormProps) {
 
                     {previewImage ? (
                         <>
-                            <Image
+                            <SupabaseImage
                                 src={previewImage}
                                 alt="Preview"
                                 fill

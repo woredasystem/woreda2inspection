@@ -1,5 +1,6 @@
 import { getNewsItem } from "@/lib/news";
 import Image from "next/image";
+import { SupabaseImage } from "@/components/SupabaseImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { HiArrowLeft, HiCalendar, HiUser } from "react-icons/hi2";
@@ -65,7 +66,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
                     {/* Featured Image */}
                     {newsItem.cover_image_url && (
                         <div className="relative aspect-video w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl mb-12">
-                            <Image
+                            <SupabaseImage
                                 src={newsItem.cover_image_url}
                                 alt={newsItem.title}
                                 fill

@@ -2,7 +2,7 @@ import { getNewsItem } from "@/lib/news";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { HiArrowLeft, HiCalendar, HiUser, HiPlayCircle } from "react-icons/hi2";
+import { HiArrowLeft, HiCalendar, HiUser } from "react-icons/hi2";
 import { format } from "date-fns";
 import { Footer } from "@/components/Footer";
 import { publicEnv } from "@/lib/env";
@@ -16,33 +16,6 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
     if (!newsItem) {
         notFound();
     }
-
-    const rawYoutubeUrl = newsItem.youtube_url?.trim();
-
-    const getYoutubeEmbedUrl = (url: string | undefined): string | null => {
-        if (!url) return null;
-        try {
-            const u = new URL(url);
-            if (u.hostname.includes("youtu.be")) {
-                // https://youtu.be/VIDEO_ID
-                const id = u.pathname.split("/").filter(Boolean)[0];
-                return id ? `https://www.youtube.com/embed/${id}` : null;
-            }
-            if (u.hostname.includes("youtube.com")) {
-                const v = u.searchParams.get("v");
-                if (v) return `https://www.youtube.com/embed/${v}`;
-                // already an embed link
-                if (u.pathname.startsWith("/embed/")) {
-                    return u.toString();
-                }
-            }
-            return null;
-        } catch {
-            return null;
-        }
-    };
-
-    const youtubeEmbedUrl = getYoutubeEmbedUrl(rawYoutubeUrl);
 
     return (
         <div className="min-h-screen bg-white">
@@ -98,50 +71,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
                                 fill
                                 className="object-cover"
                                 priority
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 896px"
                             />
-                        </div>
-                    )}
-
-                    {/* Photo Gallery */}
-                    {newsItem.photos && newsItem.photos.length > 0 && (
-                        <div className="mb-12 space-y-4">
-                            <h2 className="text-2xl font-bold text-slate-900">Photos</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {newsItem.photos.map((photo) => (
-                                    <div
-                                        key={photo.id}
-                                        className="relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow group"
-                                    >
-                                        <Image
-                                            src={photo.image_url}
-                                            alt={`${newsItem.title} - Photo ${photo.sort_order + 1}`}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* YouTube Video */}
-                    {youtubeEmbedUrl && (
-                        <div className="mb-12 space-y-3">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 text-red-600 text-xs font-semibold border border-red-100">
-                                <HiPlayCircle className="w-4 h-4" />
-                                Watch related video
-                            </div>
-                            <div className="relative aspect-video w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
-                                <iframe
-                                    src={youtubeEmbedUrl}
-                                    title="YouTube video player"
-                                    className="w-full h-full"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowFullScreen
-                                />
-                            </div>
                         </div>
                     )}
 

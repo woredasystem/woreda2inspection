@@ -286,17 +286,19 @@ export function LeaderForm({ initialData, onSuccess }: LeaderFormProps) {
                     />
                 </div>
 
-                {/* Speech/Message Input - Available for all leaders */}
+                {/* Speech/Message Input - Available for all leaders, displayed on homepage for principal */}
                 <div className={`space-y-2 ${activeTab === 'en' ? 'block' : 'hidden'}`}>
                     <label className="text-sm font-bold text-slate-700 tracking-wide uppercase flex items-center gap-2">
-                        {t('leaderSpeech')}
+                        {t('leaderSpeech')} {category === 'principal' && <span className="text-red-400">*</span>}
+                        {category !== 'principal' && <span className="text-xs font-normal text-slate-500">(Only displayed for principal on homepage)</span>}
                     </label>
                     <textarea
                         name="speech"
                         defaultValue={initialData?.speech}
+                        required={category === 'principal'}
                         rows={6}
                         className="w-full bg-white/50 backdrop-blur-sm rounded-2xl border-2 border-slate-100 px-5 py-4 text-base font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm focus:shadow-lg leading-relaxed"
-                        placeholder="Enter leader's message or speech (optional)"
+                        placeholder={category === 'principal' ? "Enter the principal's message..." : "Optional message (only shown for principal)"}
                     />
                 </div>
                 <div className={`space-y-2 ${activeTab === 'am' ? 'block' : 'hidden'}`}>
@@ -308,7 +310,7 @@ export function LeaderForm({ initialData, onSuccess }: LeaderFormProps) {
                         defaultValue={initialData?.speech_am}
                         rows={6}
                         className="w-full bg-white/50 backdrop-blur-sm rounded-2xl border-2 border-slate-100 px-5 py-4 text-base font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm focus:shadow-lg leading-relaxed"
-                        placeholder="Enter leader's message in Amharic (optional)"
+                        placeholder="መልዕክት (አማርኛ)"
                     />
                 </div>
                 <div className={`space-y-2 ${activeTab === 'or' ? 'block' : 'hidden'}`}>
@@ -320,7 +322,7 @@ export function LeaderForm({ initialData, onSuccess }: LeaderFormProps) {
                         defaultValue={initialData?.speech_or}
                         rows={6}
                         className="w-full bg-white/50 backdrop-blur-sm rounded-2xl border-2 border-slate-100 px-5 py-4 text-base font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm focus:shadow-lg leading-relaxed"
-                        placeholder="Enter leader's message in Oromifa (optional)"
+                        placeholder="Ergaa (Oromiffa)"
                     />
                 </div>
             </div>
@@ -328,7 +330,7 @@ export function LeaderForm({ initialData, onSuccess }: LeaderFormProps) {
             {/* Image Upload Area */}
             <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700 tracking-wide uppercase flex items-center gap-2">
-                    {category === 'principal' ? t('coverImage') : t('photo')}
+                    {t('leaderCategory') === 'principal' ? t('coverImage') : t('photo')}
                     <HiSparkles className="w-4 h-4 text-yellow-500" />
                 </label>
 
@@ -355,7 +357,6 @@ export function LeaderForm({ initialData, onSuccess }: LeaderFormProps) {
                                 alt="Preview"
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                sizes="(max-width: 768px) 100vw, 600px"
                             />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
                                 <span className="px-6 py-3 bg-white/20 border border-white/40 rounded-full text-white font-bold backdrop-blur-md shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all">

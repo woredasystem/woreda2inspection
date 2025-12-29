@@ -1,6 +1,16 @@
 import type { StaticImageData } from "next/image";
 
+export interface LeaderProfile {
+  name: string;
+  title: string;
+  photo: string | StaticImageData;
+}
 
+export interface LeaderCategory {
+  id: string;
+  title: string;
+  leaders: LeaderProfile[];
+}
 
 export interface DocumentSubcategory {
   id: string;
@@ -40,7 +50,7 @@ export interface DocumentUploadRecord {
   subcategory_code: string;
   year: string;
   file_name: string;
-  r2_url: string;
+  storage_url: string;
   uploader_id: string;
   created_at: string;
 }
@@ -65,52 +75,35 @@ export interface AppointmentRecord {
   updated_at: string;
 }
 
-export interface NewsPhotoRecord {
-  id: string;
-  news_id: string;
-  woreda_id: string;
-  image_url: string;
-  sort_order: number;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface NewsRecord {
   id: string;
   woreda_id: string;
   title: string;
   content: string;
   summary?: string;
-  title_am?: string;
-  content_am?: string;
-  summary_am?: string;
-  title_or?: string;
-  content_or?: string;
-  summary_or?: string;
   cover_image_url?: string;
   youtube_url?: string;
   published: boolean;
   published_at?: string;
   created_at: string;
   updated_at: string;
-  photos?: NewsPhotoRecord[];
 }
 
 export interface LeaderRecord {
   id: string;
   woreda_id: string;
   name: string;
-  name_am?: string;
-  name_or?: string;
   title: string;
+  speech?: string;
+  name_am?: string;
   title_am?: string;
+  speech_am?: string;
+  name_or?: string;
   title_or?: string;
-  photo_url?: string;
+  speech_or?: string;
   category: 'principal' | 'commission-committee' | 'management' | 'work-leadership' | 'monitoring-committees';
   sort_order: number;
-  speech?: string;
-  speech_am?: string;
-  speech_or?: string;
+  photo_url?: string;
   created_at: string;
   updated_at: string;
 }

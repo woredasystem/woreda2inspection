@@ -1,8 +1,7 @@
 
 import { getSupabaseServerClient, getCurrentUserWoredaId } from "./supabaseServer";
 import { publicEnv, requiredEnv } from "./env";
-import type { NewsRecord, NewsPhotoRecord } from "@/types";
-import { getNewsPhotos } from "./news-actions";
+import type { NewsRecord } from "@/types";
 
 /**
  * Fetch published news for public display
@@ -10,21 +9,8 @@ import { getNewsPhotos } from "./news-actions";
 export async function getNews(limit = 6): Promise<NewsRecord[]> {
     const supabase = await getSupabaseServerClient();
     const woredaId = publicEnv.NEXT_PUBLIC_WOREDA_ID;
-
     // #region agent log
-    fetch('http://127.0.0.1:7244/ingest/fc0a35e4-d777-4627-b1d5-a657a6abd381', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            sessionId: 'debug-session',
-            runId: 'pre-fix',
-            hypothesisId: 'H1',
-            location: 'src/lib/news.ts:getNews:entry',
-            message: 'getNews called',
-            data: { limit, woredaId },
-            timestamp: Date.now()
-        })
-    }).catch(() => { });
+    fetch('http://127.0.0.1:7244/ingest/fc0a35e4-d777-4627-b1d5-a657a6abd381',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'src/lib/news.ts:11',message:'getNews called',data:{woredaId,limit},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
     // #endregion
 
     const { data, error } = await supabase
@@ -34,26 +20,8 @@ export async function getNews(limit = 6): Promise<NewsRecord[]> {
         .eq("published", true)
         .order("published_at", { ascending: false })
         .limit(limit);
-
     // #region agent log
-    fetch('http://127.0.0.1:7244/ingest/fc0a35e4-d777-4627-b1d5-a657a6abd381', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            sessionId: 'debug-session',
-            runId: 'pre-fix',
-            hypothesisId: 'H2',
-            location: 'src/lib/news.ts:getNews:after-query',
-            message: 'getNews query result',
-            data: {
-                woredaId,
-                hasError: !!error,
-                errorMessage: error?.message ?? null,
-                rowCount: Array.isArray(data) ? data.length : null
-            },
-            timestamp: Date.now()
-        })
-    }).catch(() => { });
+    fetch('http://127.0.0.1:7244/ingest/fc0a35e4-d777-4627-b1d5-a657a6abd381',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'src/lib/news.ts:20',message:'News query result',data:{hasError:!!error,errorMessage:error?.message,dataCount:data?.length,firstItemWoredaId:data?.[0]?.woreda_id,firstItemPublished:data?.[0]?.published,allWoredaIds:data?.map((d:any)=>d.woreda_id)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B,D'})}).catch(()=>{});
     // #endregion
 
     if (error) {
@@ -61,39 +29,7 @@ export async function getNews(limit = 6): Promise<NewsRecord[]> {
         return [];
     }
 
-    // #region agent log
-    fetch('http://127.0.0.1:7244/ingest/fc0a35e4-d777-4627-b1d5-a657a6abd381', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            sessionId: 'debug-session',
-            runId: 'pre-fix',
-            hypothesisId: 'H3',
-            location: 'src/lib/news.ts:getNews:exit',
-            message: 'getNews returning data',
-            data: {
-                woredaId,
-                returnedCount: Array.isArray(data) ? data.length : null
-            },
-            timestamp: Date.now()
-        })
-    }).catch(() => { });
-    // #endregion
-
-    // Fetch photos for each news item
-    const newsWithPhotos = await Promise.all(
-        (data || []).map(async (item: NewsRecord) => {
-            try {
-                const photos = await getNewsPhotos(item.id);
-                return { ...item, photos };
-            } catch (error) {
-                console.error(`Error fetching photos for news ${item.id}:`, error);
-                return { ...item, photos: [] };
-            }
-        })
-    );
-
-    return newsWithPhotos as NewsRecord[];
+    return (data as NewsRecord[]) || [];
 }
 
 /**
@@ -118,20 +54,7 @@ export async function getAllNews(): Promise<NewsRecord[]> {
         return [];
     }
 
-    // Fetch photos for each news item
-    const newsWithPhotos = await Promise.all(
-        (data || []).map(async (item: NewsRecord) => {
-            try {
-                const photos = await getNewsPhotos(item.id);
-                return { ...item, photos };
-            } catch (error) {
-                console.error(`Error fetching photos for news ${item.id}:`, error);
-                return { ...item, photos: [] };
-            }
-        })
-    );
-
-    return newsWithPhotos as NewsRecord[];
+    return (data as NewsRecord[]) || [];
 }
 
 /**
@@ -152,16 +75,5 @@ export async function getNewsItem(id: string): Promise<NewsRecord | null> {
         return null;
     }
 
-    if (!data) return null;
-
-    // Fetch photos for this news item
-    let photos: NewsPhotoRecord[] = [];
-    try {
-        photos = await getNewsPhotos(id);
-    } catch (error) {
-        console.error(`Error fetching photos for news ${id}:`, error);
-        // Continue without photos rather than failing
-    }
-
-    return { ...(data as NewsRecord), photos };
+    return (data as NewsRecord) || null;
 }

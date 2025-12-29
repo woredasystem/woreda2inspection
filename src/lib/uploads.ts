@@ -1,109 +1,49 @@
 import { getSupabaseServerClient } from "./supabaseServer";
-import { requiredEnv, publicEnv } from "./env";
 import type { DocumentUploadRecord } from "@/types";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
-export async function uploadDocumentToR2(args: {
+export async function uploadDocumentToStorage(args: {
   folderPath: string;
   file: File;
 }): Promise<string> {
   try {
-    const uploadUrl = requiredEnv.CLOUDFLARE_R2_UPLOAD_URL();
-    const publicUrlBase = requiredEnv.CLOUDFLARE_R2_PUBLIC_URL();
+    const supabase = await getSupabaseServerClient();
 
-    // R2 public URLs format depends on the type:
-    // 1. pub-*.r2.dev format: https://pub-ACCOUNT.r2.dev/BUCKET/path
-    // 2. BUCKET.*.r2.dev format: https://BUCKET.ACCOUNT.r2.dev/path
-    // 3. Custom domain: https://domain.com/path
-    const bucketName = process.env.CLOUDFLARE_R2_BUCKET_NAME || "woreda-documents";
-
-    // Construct public URL
-    // Construct public URL
-    // We encode the path components to ensure the URL is valid, including handling spaces and parentheses
-    // This ensures consistency with how we handle URLs in the frontend and API
-    const encodedPath = args.folderPath.split('/').map(p =>
-      encodeURIComponent(p)
-        .replace(/\(/g, '%28')
-        .replace(/\)/g, '%29')
-    ).join('/');
-
-    let publicUrl: string;
-    if (publicUrlBase.includes('pub-') && publicUrlBase.includes('.r2.dev')) {
-      // Format: https://pub-ACCOUNT.r2.dev/path (bucket-specific subdomain)
-      const base = publicUrlBase.endsWith('/') ? publicUrlBase.slice(0, -1) : publicUrlBase;
-      publicUrl = `${base}/${encodedPath}`;
-    } else if (publicUrlBase.includes('.r2.dev') && !publicUrlBase.includes('pub-')) {
-      // Format: https://BUCKET.ACCOUNT.r2.dev/path (bucket-specific subdomain)
-      publicUrl = publicUrlBase.endsWith('/')
-        ? `${publicUrlBase}${encodedPath}`
-        : `${publicUrlBase}/${encodedPath}`;
-    } else {
-      // Custom domain or other format
-      publicUrl = publicUrlBase.endsWith('/')
-        ? `${publicUrlBase}${encodedPath}`
-        : `${publicUrlBase}/${encodedPath}`;
-    }
-
-    console.log("R2 Public URL Construction:", {
-      publicUrlBase,
-      bucketName,
+    console.log("Uploading to Supabase Storage:", {
+      bucket: 'documents',
       folderPath: args.folderPath,
-      constructedUrl: publicUrl,
-      urlType: publicUrlBase.includes('pub-') ? 'pub-account' : publicUrlBase.includes('.r2.dev') ? 'bucket-subdomain' : 'custom-domain'
-    });
-
-    const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
-    const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
-
-    if (!accessKeyId || !secretAccessKey) {
-      throw new Error("Cloudflare R2 credentials (CLOUDFLARE_R2_ACCESS_KEY_ID and CLOUDFLARE_R2_SECRET_ACCESS_KEY) are not configured.");
-    }
-
-    // R2 endpoint format: https://{account-id}.r2.cloudflarestorage.com
-    // Bucket name: "woreda-documents" (single bucket for all woredas)
-    // Folder structure: woreda-id/category/subcategory/year/filename
-    const urlObj = new URL(uploadUrl);
-    const endpoint = `https://${urlObj.hostname}`;
-
-    // bucketName is already defined above, no need to redeclare
-
-    console.log("R2 Upload Details:", {
-      endpoint,
-      bucketName,
-      key: args.folderPath,
       fileName: args.file.name,
       fileSize: args.file.size,
     });
 
-    const fileBuffer = await args.file.arrayBuffer();
-    const contentType = args.file.type || "application/octet-stream";
+    // Upload file to Supabase Storage
+    const { data: uploadData, error: uploadError } = await supabase
+      .storage
+      .from('documents')
+      .upload(args.folderPath, args.file, {
+        contentType: args.file.type || "application/octet-stream",
+        upsert: false, // Don't overwrite existing files
+      });
 
-    // Create S3 client for R2
-    const s3Client = new S3Client({
-      region: "auto",
-      endpoint: endpoint,
-      credentials: {
-        accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
-      },
-      forcePathStyle: true, // R2 requires path-style URLs
-    });
+    if (uploadError) {
+      console.error("Supabase Storage upload error:", uploadError);
+      throw new Error(`Failed to upload file: ${uploadError.message}`);
+    }
 
-    // Upload to R2 using S3-compatible API
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: args.folderPath,
-      Body: Buffer.from(fileBuffer),
-      ContentType: contentType,
-    });
+    if (!uploadData) {
+      throw new Error("Upload succeeded but no data returned");
+    }
 
-    console.log("Uploading to R2...");
-    await s3Client.send(command);
-    console.log("R2 upload successful, returning public URL:", publicUrl);
+    // Get public URL
+    const { data: { publicUrl } } = supabase
+      .storage
+      .from('documents')
+      .getPublicUrl(args.folderPath);
+
+    console.log("Supabase Storage upload successful, returning public URL:", publicUrl);
 
     return publicUrl;
   } catch (error) {
-    console.error("uploadDocumentToR2 error:", error);
+    console.error("uploadDocumentToStorage error:", error);
     throw error;
   }
 }
@@ -115,7 +55,7 @@ export async function saveDocumentMetadata(args: {
   subcategoryCode: string;
   year: string;
   fileName: string;
-  r2Url: string;
+  storageUrl: string;
   uploaderId: string;
 }): Promise<DocumentUploadRecord> {
   // Get woreda_id from current user's metadata (Option 2)
@@ -129,7 +69,7 @@ export async function saveDocumentMetadata(args: {
       subcategory_code: args.subcategoryCode,
       year: args.year,
       file_name: args.fileName,
-      r2_url: args.r2Url,
+      storage_url: args.storageUrl,
       uploader_id: args.uploaderId,
     })
     .select()

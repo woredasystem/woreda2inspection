@@ -87,9 +87,7 @@ export function PrincipalMessage({ principal }: PrincipalMessageProps) {
                                 <span className="relative inline-flex h-3 w-3 rounded-full bg-blue-500" />
                             </span>
                             <span className="text-sm font-bold uppercase tracking-wider">
-                                {principal.category === 'principal' 
-                                    ? t('leaders.administratorMessage') 
-                                    : t('leaders.leaderMessage')}
+                                {t('leaders.administratorMessage')}
                             </span>
                         </div>
                         <blockquote className="text-xl md:text-2xl font-medium leading-relaxed text-slate-700 lg:text-3xl">

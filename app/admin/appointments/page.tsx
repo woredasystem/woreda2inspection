@@ -13,33 +13,22 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 async function getAppointments(): Promise<AppointmentRecord[]> {
-  try {
-    const supabase = getSupabaseAdminClient();
-    const woredaId = publicEnv.NEXT_PUBLIC_WOREDA_ID;
+  const supabase = getSupabaseAdminClient();
+  const woredaId = publicEnv.NEXT_PUBLIC_WOREDA_ID;
 
-    const { data, error } = await supabase
-      .from("appointments")
-      .select("*")
-      .eq("woreda_id", woredaId)
-      .order("created_at", { ascending: false })
-      .limit(100);
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("woreda_id", woredaId)
+    .order("created_at", { ascending: false })
+    .limit(100);
 
-    if (error) {
-      console.error("Error fetching appointments:", {
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code,
-        fullError: JSON.stringify(error, null, 2),
-      });
-      return [];
-    }
-
-    return (data || []) as AppointmentRecord[];
-  } catch (err) {
-    console.error("Failed to initialize Supabase client or fetch appointments:", err);
+  if (error) {
+    console.error("Error fetching appointments:", error);
     return [];
   }
+
+  return (data || []) as AppointmentRecord[];
 }
 
 export default async function AdminAppointmentsPage() {

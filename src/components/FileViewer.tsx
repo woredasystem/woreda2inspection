@@ -29,7 +29,7 @@ export function FileViewer({ fileUrl, fileName, isOpen, onClose, accessToken }: 
       setLoading(true);
       setError(null);
 
-      // For Office documents, we need to get the direct public R2 URL
+      // For Office documents, we need to get the direct public Supabase Storage URL
       // because Microsoft Office Online Viewer can't access our authenticated proxy
       if (isOffice && accessToken) {
         // Fetch the public URL from our API
@@ -50,9 +50,7 @@ export function FileViewer({ fileUrl, fileName, isOpen, onClose, accessToken }: 
 
             if (!isAccessible) {
               console.error("❌ File is not publicly accessible. Office viewer will fail.");
-              console.error("💡 Solution: Enable public R2.dev domain for your bucket in Cloudflare Dashboard");
-              console.error("   Go to: R2 → Your bucket → Settings → Public R2.dev Subdomain");
-              console.error("   Enable the domain: pub-fcc35482a42b44e989b242c288d0d9e1.r2.dev");
+              console.error("💡 Solution: Ensure Supabase Storage bucket 'documents' is set to public");
 
               // For Office documents, we can't use our proxy because Microsoft's servers need direct access
               // So we'll show a helpful error with download option
@@ -60,7 +58,7 @@ export function FileViewer({ fileUrl, fileName, isOpen, onClose, accessToken }: 
                 message ||
                 `Office documents require public file access. ` +
                 `The file is not publicly accessible (${accessibilityError}). ` +
-                `\n\nPlease ensure your R2 bucket has "Public R2.dev Subdomain" enabled in Cloudflare settings.` +
+                `\n\nPlease ensure your Supabase Storage bucket 'documents' is set to public.` +
                 `\n\nAlternatively, download the file to view it.`
               );
               setLoading(false);
@@ -68,7 +66,7 @@ export function FileViewer({ fileUrl, fileName, isOpen, onClose, accessToken }: 
             }
 
 
-            // Use Microsoft Office Online Viewer with the public R2 URL
+            // Use Microsoft Office Online Viewer with the public Supabase Storage URL
             // Note: publicUrl already has properly encoded path components, so we encode the entire URL
             // for use as a query parameter (this is correct - we're encoding the URL as a whole)
             const officeViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(publicUrl)}`;

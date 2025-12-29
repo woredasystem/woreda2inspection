@@ -16,9 +16,16 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'rngmreyszyrddskbzhmd.supabase.co',
+      },
+      {
+        protocol: 'https',
         hostname: 'img.youtube.com',
       },
     ],
+  },
+  serverActions: {
+    bodySizeLimit: '5mb',
   },
 };
 

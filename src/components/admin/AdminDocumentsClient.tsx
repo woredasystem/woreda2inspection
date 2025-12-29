@@ -300,7 +300,7 @@ export function AdminDocumentsClient({ documents }: AdminDocumentsClientProps) {
 
                                                                                     <div className="flex items-center gap-2 w-full sm:w-auto sm:flex-shrink-0">
                                                                                         <Link
-                                                                                            href={document.r2_url}
+                                                                                            href={document.storage_url}
                                                                                             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-green-50 hover:text-green-600"
                                                                                             target="_blank"
                                                                                             rel="noreferrer"

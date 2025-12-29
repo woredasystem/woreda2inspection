@@ -1,4 +1,6 @@
 -- Create uploads table for document metadata
+-- Note: This migration has been updated to use storage_url instead of r2_url
+-- The actual table creation is handled by the create_all_tables migration
 CREATE TABLE IF NOT EXISTS public.uploads (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   woreda_id TEXT NOT NULL,
@@ -6,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.uploads (
   subcategory_code TEXT NOT NULL,
   year TEXT NOT NULL,
   file_name TEXT NOT NULL,
-  r2_url TEXT NOT NULL,
+  storage_url TEXT NOT NULL,
   uploader_id TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );

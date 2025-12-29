@@ -31,27 +31,30 @@ Set the following variables in `.env.local` or your deployment platform. The val
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key for the client-side auth flow. |
 | `SUPABASE_URL` | Supabase URL used by server helpers (duplicate of the public URL). |
 | `SUPABASE_SERVICE_ROLE_KEY` | Service role key required to insert requests, temporary access tokens, and upload metadata securely. |
-| `CLOUDFLARE_R2_UPLOAD_URL` | Fully qualified R2 upload endpoint (e.g. `https://ACCOUNT.r2.cloudflarestorage.com/BUCKET`). |
-| `CLOUDFLARE_R2_PUBLIC_URL` | Base public URL for downloads (same structure as above). |
 
 Ensure the `.env.local` file is never committed. Each Woreda simply swaps the `NEXT_PUBLIC_*` values while keeping the shared logic untouched.
 
 ## Supabase / Data Model
 
-Create the following tables (simplified schema guidance):
+The following tables are created automatically via migrations:
 
 1. `qr_requests` &mdash; stores `code`, `ip_address`, `woreda_id`, `status`, `temporary_access_token`, `created_at`.
 2. `temporary_access` &mdash; holds `request_id`, `woreda_id`, `token`, `expires_at`, `created_at`.
-3. `uploads` &mdash; logs `woreda_id`, `category_id`, `subcategory_code`, `year`, `file_name`, `r2_url`, `uploader_id`, `created_at`.
+3. `uploads` &mdash; logs `woreda_id`, `category_id`, `subcategory_code`, `year`, `file_name`, `storage_url`, `uploader_id`, `created_at`.
+4. `news` &mdash; stores news articles with `title`, `content`, `summary`, `cover_image_url`, `youtube_url`, `published`, etc.
+5. `leaders` &mdash; stores leader information with multilingual support (`name`, `title`, `speech`, etc.).
+6. `appointments` &mdash; stores appointment requests with Ethiopian calendar support.
 
 Supabase auth handles administrators. The login page hits `supabase.auth.signInWithPassword` and redirects to `/admin/dashboard` once validated.
 
-## Cloudflare R2
+## Supabase Storage
 
-- Uploads are sent to `CLOUDFLARE_R2_UPLOAD_URL` via the `/api/admin/upload` route.
+- Uploads are sent to Supabase Storage bucket `documents` via the `/api/admin/upload` route.
 - Metadata and download URLs are stored in Supabase by `saveDocumentMetadata`.
-- Documents shown to approved users come from `CLOUDFLARE_R2_PUBLIC_URL`.
+- Documents shown to approved users come from Supabase Storage public URLs.
 - Folder structure: `<woreda-id>/<category-id>/<subcategory-code>/<year>/<file-name>`.
+- The `documents` bucket must be set to public for file access.
+- News images are stored in the `news` bucket.
 
 ## Folder Layout Highlights
 

@@ -15,7 +15,6 @@ export default function LoginLayout({
           fill
           priority
           className="object-cover object-left lg:object-center"
-          sizes="100vw"
         />
         {/* Very light overlay so the image is clearly visible, but text still pops */}
         <div className="absolute inset-0 bg-white/15 lg:bg-white/10" />

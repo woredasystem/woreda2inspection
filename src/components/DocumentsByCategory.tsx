@@ -233,7 +233,7 @@ export function DocumentsByCategory({ documents, accessToken }: DocumentsByCateg
                                                 <button
                                                   onClick={() =>
                                                     setViewingFile({
-                                                      url: document.r2_url,
+                                                      url: document.storage_url,
                                                       name: document.file_name,
                                                     })
                                                   }
@@ -244,7 +244,7 @@ export function DocumentsByCategory({ documents, accessToken }: DocumentsByCateg
                                                   <span className="sm:hidden">View</span>
                                                 </button>
                                                 <Link
-                                                  href={document.r2_url}
+                                                  href={document.storage_url}
                                                   className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-blue-600"
                                                   target="_blank"
                                                   rel="noreferrer"

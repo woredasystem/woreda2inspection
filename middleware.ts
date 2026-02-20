@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    // Skip auth if Supabase is not configured
+    console.error("Middleware Error: Missing Supabase Environment Variables");
     return supabaseResponse;
   }
 

@@ -10,7 +10,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="text-center md:text-left">
           <p className="text-sm font-bold uppercase tracking-widest text-slate-900">
-            የ አቃ/ቃ ክ/ከተማ ወረዳ 1 ብልፅግና ኢንስፔክሽን ስነ ምግባር ኮሚሽን
+            {t('footerTitle')}
           </p>
         </div>
 

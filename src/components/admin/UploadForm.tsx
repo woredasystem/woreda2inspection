@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 
 export function UploadForm() {
   const t = useTranslations('admin');
+  const tCategories = useTranslations('categories');
   const [status, setStatus] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
@@ -99,7 +100,7 @@ export function UploadForm() {
             <option value="">{t('selectCategory')}</option>
             {documentCategories.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.id} - {category.label}
+                {category.id} - {tCategories(category.id)}
               </option>
             ))}
           </select>
@@ -119,7 +120,7 @@ export function UploadForm() {
             <option value="">{t('selectSubcategory')}</option>
             {availableSubcategories.map((subcategory) => (
               <option key={subcategory.code} value={subcategory.code}>
-                {subcategory.code} - {subcategory.label}
+                {subcategory.code} - {tCategories(subcategory.code)}
               </option>
             ))}
           </select>

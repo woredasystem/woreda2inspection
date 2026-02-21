@@ -22,6 +22,7 @@ interface AdminDocumentsClientProps {
 
 export function AdminDocumentsClient({ documents }: AdminDocumentsClientProps) {
     const t = useTranslations('admin');
+    const tCategories = useTranslations('categories');
     const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
     const [expandedSubcategories, setExpandedSubcategories] = useState<Set<string>>(new Set());
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -201,7 +202,7 @@ export function AdminDocumentsClient({ documents }: AdminDocumentsClientProps) {
                                     </div>
                                     <div>
                                         <h2 className="text-xl font-bold text-slate-900 md:text-2xl">
-                                            {category.id} - {category.label}
+                                            {category.id} - {tCategories(category.id)}
                                         </h2>
                                         <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">
                                             {totalDocsInCategory} {t('documents')}
@@ -241,7 +242,7 @@ export function AdminDocumentsClient({ documents }: AdminDocumentsClientProps) {
                                                                 )}
                                                                 <div>
                                                                     <h3 className="text-base font-bold text-slate-800">
-                                                                        {subcategory.code} – {subcategory.label}
+                                                                        {subcategory.code} – {tCategories(subcategory.code)}
                                                                     </h3>
                                                                     <p className="text-xs font-medium text-slate-500">
                                                                         {subcategoryDocs.length} {t('documents')}
@@ -306,20 +307,20 @@ export function AdminDocumentsClient({ documents }: AdminDocumentsClientProps) {
                                                                                             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-green-50 hover:text-green-600"
                                                                                             target="_blank"
                                                                                             rel="noreferrer"
-                                                                                            title="Download"
-                                                                                        >
-                                                                                            <HiDocumentArrowDown className="h-4 w-4" />
-                                                                                            <span className="sm:hidden">{t('download') || 'Download'}</span>
-                                                                                        </Link>
-                                                                                        <button
-                                                                                            onClick={() => handleDelete(document.id, document.file_name)}
-                                                                                            disabled={deletingId === document.id}
-                                                                                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 disabled:opacity-50"
-                                                                                            title="Delete"
-                                                                                        >
-                                                                                            <HiTrash className="h-4 w-4" />
-                                                                                            <span className="sm:hidden">{deletingId === document.id ? (t('uploading') || 'Deleting...') : (t('delete') || 'Delete')}</span>
-                                                                                        </button>
+                                                                            title={t('downloadFile') || 'Download'}
+                                                                        >
+                                                                            <HiDocumentArrowDown className="h-4 w-4" />
+                                                                            <span className="sm:hidden">{t('downloadFile') || 'Download'}</span>
+                                                                        </Link>
+                                                                        <button
+                                                                            onClick={() => handleDelete(document.id, document.file_name)}
+                                                                            disabled={deletingId === document.id}
+                                                                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+                                                                            title={t('delete') || 'Delete'}
+                                                                        >
+                                                                            <HiTrash className="h-4 w-4" />
+                                                                            <span className="sm:hidden">{deletingId === document.id ? (t('uploading') || 'Deleting...') : (t('delete') || 'Delete')}</span>
+                                                                        </button>
                                                                                     </div>
                                                                                 </motion.article>
                                                                             ))}

@@ -15,7 +15,8 @@ interface DocumentsByCategoryProps {
 }
 
 export function DocumentsByCategory({ documents, accessToken }: DocumentsByCategoryProps) {
-  const t = useTranslations();
+  const t = useTranslations('documents');
+  const tCategories = useTranslations('categories');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set()
   );
@@ -121,10 +122,10 @@ export function DocumentsByCategory({ documents, accessToken }: DocumentsByCateg
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 md:text-2xl">
-                    {category.id} - {category.label}
+                    {category.id} - {tCategories(category.id)}
                   </h2>
                   <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">
-                    {totalDocsInCategory} document{totalDocsInCategory !== 1 ? "s" : ""}
+                    {totalDocsInCategory} {totalDocsInCategory !== 1 ? t('files') : t('file')}
                   </p>
                 </div>
               </div>
@@ -180,12 +181,11 @@ export function DocumentsByCategory({ documents, accessToken }: DocumentsByCateg
                                 )}
                                 <div>
                                   <h3 className="text-base font-bold text-slate-800">
-                                    {subcategory.code} – {subcategory.label}
+                                    {subcategory.code} – {tCategories(subcategory.code)}
                                   </h3>
-                                  <p className="text-xs font-medium text-slate-500">
-                                    {subcategoryDocs.length} file
-                                    {subcategoryDocs.length !== 1 ? "s" : ""}
-                                  </p>
+                                                                  <p className="text-xs font-medium text-slate-500">
+                                                                    {subcategoryDocs.length} {subcategoryDocs.length !== 1 ? t('files') : t('file')}
+                                                                  </p>
                                 </div>
                               </div>
                             </button>
@@ -204,7 +204,7 @@ export function DocumentsByCategory({ documents, accessToken }: DocumentsByCateg
                                         <div className="flex items-center gap-2">
                                           <div className="h-px flex-1 bg-slate-100"></div>
                                           <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                                            Year {year}
+                                            {t('year')} {year}
                                           </p>
                                           <div className="h-px flex-1 bg-slate-100"></div>
                                         </div>
@@ -238,20 +238,20 @@ export function DocumentsByCategory({ documents, accessToken }: DocumentsByCateg
                                                     })
                                                   }
                                                   className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-blue-600"
-                                                  title="View"
+                                                  title={t('view')}
                                                 >
                                                   <HiEye className="h-4 w-4" />
-                                                  <span className="sm:hidden">View</span>
+                                                  <span className="sm:hidden">{t('view')}</span>
                                                 </button>
                                                 <Link
                                                   href={document.storage_url}
                                                   className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-blue-600"
                                                   target="_blank"
                                                   rel="noreferrer"
-                                                  title="Download"
+                                                  title={t('download')}
                                                 >
                                                   <HiDocumentArrowDown className="h-4 w-4" />
-                                                  <span className="sm:hidden">Download</span>
+                                                  <span className="sm:hidden">{t('download')}</span>
                                                 </Link>
                                               </div>
                                             </motion.article>

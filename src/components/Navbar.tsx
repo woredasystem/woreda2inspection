@@ -25,11 +25,11 @@ export function Navbar() {
                     </div>
                     <div>
                         <span className="block text-sm font-bold text-slate-900">
-                            የአቃቂ ቃሊቲ ወረዳ 1 ብልፅግና ኢንስፔክሽንና ስነ ምግባር ኮሚሽን
+                            {t('navbar.title')}
                         </span>
                         {/* Motto - Mobile */}
                         <span className="md:hidden block text-xs font-semibold bg-gradient-to-r from-[#4169E1] to-purple-600 bg-clip-text text-transparent mt-0.5">
-                            ጠንካራ ኢንስፔክሽን ለጠንካራ ፖርቲ
+                            {t('navbar.motto')}
                         </span>
                     </div>
                 </div>
@@ -38,7 +38,7 @@ export function Navbar() {
                 <div className="hidden md:flex items-center">
                     <div className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100/50">
                         <p className="text-sm font-bold bg-gradient-to-r from-[#4169E1] to-purple-600 bg-clip-text text-transparent">
-                            ጠንካራ ኢንስፔክሽን ለጠንካራ ፖርቲ
+                            {t('navbar.motto')}
                         </p>
                     </div>
                 </div>

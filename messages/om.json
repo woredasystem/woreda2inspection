@@ -6,7 +6,10 @@
         "loading": "Fe'aa jira...",
         "error": "Dogoggora",
         "success": "Milkaa'ina",
-        "officialPortal": "Seensa Ofiishaalaa"
+        "officialPortal": "Seensa Ofiishaalaa",
+        "authorizedReader": "Bareessi hayyamtuu",
+        "documents": "Galmee",
+        "temporaryAccessTitle": "Komishinii Mana Barumsaa Aanaa 1 Galmeewwan"
     },
     "admin": {
         "secureAdminPortal": "Seensa Bulchaa Nageenya Qabu",

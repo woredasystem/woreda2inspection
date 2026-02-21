@@ -4,6 +4,7 @@ import { validateTemporaryAccess } from "@/lib/access";
 import { getDocumentsForWoreda } from "@/lib/uploads";
 import { publicEnv } from "@/lib/env";
 import { DocumentsByCategory } from "@/components/DocumentsByCategory";
+import { getTranslations } from "next-intl/server";
 
 const hasSupabaseServerConfig = Boolean(
   process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -28,6 +29,7 @@ export default async function DocumentsPage({
   searchParams,
 }: DocumentsPageProps) {
   const params = await searchParams;
+  const t = await getTranslations('common');
 
   if (!hasSupabaseServerConfig) {
     return (
@@ -118,10 +120,10 @@ export default async function DocumentsPage({
               </div>
               <div>
                 <p className="text-sm font-bold uppercase tracking-widest text-blue-300 mb-1">
-                  Authorized Reader
+                  {t('authorizedReader')}
                 </p>
                 <h1 className="text-3xl font-bold text-white md:text-4xl">
-                  {publicEnv.NEXT_PUBLIC_WOREDA_NAME} Documents
+                  {t('temporaryAccessTitle')}
                 </h1>
               </div>
             </div>

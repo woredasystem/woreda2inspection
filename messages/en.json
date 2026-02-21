@@ -6,7 +6,10 @@
         "loading": "Loading...",
         "error": "Error",
         "success": "Success",
-        "officialPortal": "Official Portal"
+        "officialPortal": "Official Portal",
+        "authorizedReader": "Authorized Reader",
+        "documents": "Documents",
+        "temporaryAccessTitle": "Akaki Kality Woreda 1 Commission Branch Office Documents"
     },
     "admin": {
         "secureAdminPortal": "Secure Admin Portal",

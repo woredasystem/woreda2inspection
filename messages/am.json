@@ -6,7 +6,10 @@
         "loading": "በመጫን ላይ...",
         "error": "ስህተት",
         "success": "ተሳክቷል",
-        "officialPortal": "ኦፊሴላዊ መግቢያ"
+        "officialPortal": "ኦፊሴላዊ መግቢያ",
+        "authorizedReader": "የተፈቀደ አንባቢ",
+        "documents": "ሰነዶች",
+        "temporaryAccessTitle": "የአቃቂ ቃሊቲ ወረዳ 1 ኮሚሽን ቅ/ፅ/ቤት"
     },
     "admin": {
         "secureAdminPortal": "ደህንነት ያለው የአስተዳዳሪ መግቢያ",
